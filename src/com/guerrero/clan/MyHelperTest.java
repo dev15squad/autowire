@@ -1,6 +1,6 @@
 package com.guerrero.clan;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 // http://net.tutsplus.com/tutorials/php/expressive-tests-with-hamcrest/
 
@@ -9,14 +9,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration
+@ContextConfiguration(classes=MyHelperConfiguration.class)
 public class MyHelperTest{
          
         @Autowired
@@ -28,19 +26,6 @@ public class MyHelperTest{
         private Assistant assistant; 
 
 
-        @Configuration
-        static class MyHelperConfiguration{
-                @Bean
-                public PersonService accountService() {
-                	return Mockito.mock(PersonService.class);
-                }
-                 
-                @Bean
-                public MyHelper myHelper() {
-                	return new MyHelper();
-                }
-        }
-        
         
         @Before
         public void setDate() throws Exception {
@@ -54,7 +39,6 @@ public class MyHelperTest{
                 Mockito.when(this.personService.getAssistant( id ) ).thenReturn( assistant );
 
                 Assistant assistant = myHelper.getAssistant( id );
-
                 assertThat(id, equalTo( assistant.getId() ) );
         }
         
